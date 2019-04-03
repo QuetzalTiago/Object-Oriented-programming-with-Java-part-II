@@ -4,6 +4,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+
+import wormgame.domain.Worm;
 import wormgame.game.WormGame;
 
 public class UserInterface implements Runnable {
@@ -11,6 +13,7 @@ public class UserInterface implements Runnable {
     private JFrame frame;
     private WormGame game;
     private int sideLength;
+    private DrawingBoard db;
 
     public UserInterface(WormGame game, int sideLength) {
         this.game = game;
@@ -31,11 +34,23 @@ public class UserInterface implements Runnable {
 
         frame.pack();
         frame.setVisible(true);
+
+
     }
 
     public void createComponents(Container container) {
+        DrawingBoard dB = new DrawingBoard(game,sideLength);
+        container.add(dB);
+        this.db=dB;
+
+        KeyboardListener kL = new KeyboardListener(game.getWorm());
+        frame.addKeyListener(kL);
         // Create drawing board first which then is added into container-object.
         // After this, create keyboard listener which is added into frame-object
+    }
+
+    public Updatable getUpdatable(){
+        return db;
     }
 
 
